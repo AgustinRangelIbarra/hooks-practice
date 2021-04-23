@@ -1,36 +1,62 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
 import { useForms } from "./hooks/useForms";
+import Hello from "./components/Hello";
 import "./App.css";
-import { useFetch } from "./hooks/useFetch";
+import Bye from "./components/Bye";
+import ReducerTodo from './components/Reducer';
+
+function reducer(state, action) {
+	switch (action.type) {
+		case 'INCREMENT':
+			return state + 1;
+
+		case 'DECREMENT': 
+			return state - 1;
+	
+		default:
+			return state;
+	}
+}
 
 function App() {
+
+	const [reducerCount	, dispatch] = useReducer(reducer, 0)
+
 	const [formValues, resetValues, handleChange] = useForms({
 		email: "",
 		password: "",
 		firstName: "",
 	});
 	const { email, password, firstName } = formValues;
-	
-	const [count, setCount] = useState( () => 
-		JSON.parse(localStorage.getItem("count-"))
-	);
 
 	useEffect(() => {
 		console.log("Render");
 	}, [email, password]);
 
+	const inputRefEmail = useRef();
+	const helloRef = useRef(() => console.log(`Hello`));
 
-	const { data, loadingData } = useFetch(`http://numbersapi.com/${count}/trivia`);
+	const [showHello, setShowHello] = useState(true);
 
-	useEffect(() => {
-		localStorage.setItem('count-', JSON.stringify(count));
-	}, [count])
+	useLayoutEffect(() => {
+		console.log(inputRefEmail.current.getBoundingClientRect());
+	}, []);
 
 	return (
 		<div className="App">
-			<div className="App-header">
-				<div className="form" style={{ "margin-top": "2rem" }}>
+			<div className="App-header container-sm">
+				<div className="fetch">
+					<h3>REDUCER</h3>
+					<button onClick={() => dispatch({ type: 'DECREMENT'})} className="btn btn-outline-info">Decrement</button>
+					<spandiv>{reducerCount}</spandiv>
+					<button onClick={() => dispatch({ type: 'INCREMENT'})} className="btn btn-outline-info">Increment</button>
+				</div>
+
+				<ReducerTodo />
+
+				<div className="form contanier-sm">
 					<input
+						className="form-control "
 						placeholder="First Name"
 						type="text"
 						name="firstName"
@@ -38,6 +64,8 @@ function App() {
 						onChange={handleChange}
 					/>
 					<input
+						className="form-control "
+						ref={inputRefEmail}
 						placeholder="Email"
 						type="email"
 						name="email"
@@ -45,6 +73,7 @@ function App() {
 						onChange={handleChange}
 					/>
 					<input
+						className="form-control "
 						placeholder="Password"
 						type="password"
 						name="password"
@@ -52,7 +81,7 @@ function App() {
 						onChange={handleChange}
 					/>
 
-					<div style={{ "margin-top": "2rem" }}>
+					<div>
 						{`Email: ${email}`}
 						<br />
 						{`Password: ${password}`}
@@ -60,14 +89,28 @@ function App() {
 						{`Password: ${firstName}`}
 					</div>
 
-					<button style={{ "margin-top": "2rem" }} onClick={resetValues}>
+					<button className="btn btn-outline-info" onClick={resetValues}>
 						Reset
 					</button>
-					<button onClick={() => setCount(count + 1)}> +1 </button>
-					<div>{count}</div>
-					<div className="fetch" style={{ "margin-top": "2rem" }}>
-						{loadingData ? "Loading ..." : data}
+
+					<button
+						className="btn btn-outline-info"
+						onClick={() => {
+							inputRefEmail.current.focus();
+							helloRef.current();
+						}}
+					>
+						Focus
+					</button>
+
+					<hr />
+					<div>
+						<button className="btn btn-outline-info" onClick={() => setShowHello(!showHello)}>
+							Toggle Hello Component
+						</button>
+						{showHello && <Hello />}
 					</div>
+					<hr />
 				</div>
 			</div>
 		</div>

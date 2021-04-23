@@ -1,7 +1,11 @@
 
+body{
+  background-color: #282c34;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+  background-color: #282c34;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -13,13 +17,12 @@
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
-  padding: 2rem 0 0 2rem;
-  font-size: calc(10px + 2vmin);
+  padding: 0 2rem ;
+  font-size: 1.2rem;
   color: white;
-
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
 
 }
 
@@ -27,11 +30,35 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.form-control{
+  margin: 0.5rem 0;
+  width: 300px;
+}
+
+.btn{
+  margin: 1rem 1rem 1rem 1rem;
+}
+
+div{
+  margin-top: 2rem;
+}
+
+.fetch{
+  background-color: #343a44;
+  padding: 1rem;
+  border: solid 1px rgb(136, 136, 136);
+}
+
+hr{
+  width: 100%;
+}
+
+.reducer{
+  background-color: #343a44;
+}
+
+.todo{
+  background-color: #434b58;
+  margin: 0.2rem 0;
+  padding: 0.4rem;
 }
